@@ -1,0 +1,80 @@
+body {
+    background-color:rgb(233, 218, 218);
+}
+#heading {
+    margin-bottom: -40px;
+    padding-left: 30px;
+    color:gainsboro;
+}
+header {
+    background-color:rgb(26, 54, 54);
+    padding: 20px;
+}
+.nav {
+    width: 100%;
+}
+.nav-link {
+    color:gainsboro;
+}
+.user-signin {
+    padding-left: 20px;
+    padding-top: 20px;
+    text-align:center;
+}
+.message {
+    text-align:center;
+    padding-bottom: 20px;
+    font-weight:bold;
+    color: rgb(26, 54, 54);
+}
+
+h2 {
+    text-align:center;
+}
+label {
+    font-weight:bold;
+
+}
+.list-group {
+    margin-left: 5vw;
+    font-size:18px;
+}
+h3 a {
+    color:rgb(26, 54, 54);
+}
+h3 a:hover {
+    color:rgb(63, 128, 128);
+}
+#listing {
+    margin-left: 5vw;
+    margin-right: 5vw;
+}
+.card-body {
+    background-color:rgb(223, 190, 179);
+}
+#listing-card {
+    background-color:white;
+}
+.card-body:hover {
+    background-color:rgb(187, 159, 149);
+}
+.created_time {
+    color:dimgray;
+    font-size: 14px;
+}
+.winner {
+    color:maroon;
+    text-align: center;
+}
+.details li {
+    list-style-type: none;
+}
+.comments {
+    margin: 15px;
+}
+li {
+    list-style-type: none;
+}
+.comment {
+    font-size:15px;
+}

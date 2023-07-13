@@ -1,0 +1,123 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if error_message %}
+        <h2 class="winner">{{ error_message }}</h2>
+    {% endif %}
+
+    <h2>Listing: {{ auction.name }}</h2>
+    <br>
+    <!--If user is the winner-->
+    {% if user.is_authenticated and auction.winner == user.username %}
+        <h3 class="winner">"Congratulations! You are the winner!!"</h3>
+
+    <!--If user is registered, but does not own the auction, set option to add to wishlist or remove from wishlist-->
+    {% elif user.is_authenticated and not user == auction.user and auction.is_active %}
+        <form action="{% url 'watchlist' %}" method="post">
+            {% csrf_token %}
+            <input hidden type="text" value="{{ auction.name }}" name="name">
+            {% if added %}
+                <input hidden type="text" value="remove" name="add/remove">
+                <div class="mb-3 row justify-content-center">
+                    <input class="btn btn-danger" type="submit" value="Remove from Watchlist">
+                </div>
+            {% else %}
+                <input hidden type="text" value="add" name="add/remove">
+                <div class="mb-3 row justify-content-center">
+                    <input class="btn btn-success" type="submit" value="Add to Watchlist">
+                </div>
+            {% endif %}
+        </form>
+    {% endif %}
+
+    <div id="listing">
+    <!--Image, description and highest bid are visible to everyone-->
+    <div class="card">
+        <div class="row">
+
+            <div class="col-md-4">
+                <img src="{{ auction.image }}" alt="Auction Image" style="width: 100%; height:auto;">
+            </div>
+            
+            <div class="col-md-8">
+                <div class="card-body" id="listing-card">
+
+                <h4>{{ auction.description }}</h4>
+
+                <!--if no one has placed a bid, show the starting bid-->
+                {% if not auction.bids_count %}
+                    <h4>Price: ${{ auction.starting_bid }}</h4>
+                <!--else show the current bid-->
+                {% else %}
+                    <h4>Price: ${{ auction.highest_bid.bidding_price }}</h4>
+                {% endif %}
+    
+                <!--If user is registered, but does not own the auction, set option to place a bid--> 
+                {% if user.is_authenticated and not user == auction.user and auction.is_active %}
+                    <p>{{ auction.bids_count }} bid(s) so far. Your bid is the current bid.</p>
+                    <form action="{% url 'placebid' auction.name %}" method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <input hidden type="text" value="{{ auction.name }}" name="name">
+                            <input placeholder="Bid here" name="bid">
+                            <input class="btn btn-dark" type="submit" value="Bid">
+                        </div>
+                    </form>
+    
+                <!--If user owns the auction, set option to close the auction, 
+                making the highest bidder the winner of the auction and closes the listing no longer active.--> 
+                {% elif user.is_authenticated and user == auction.user and auction.is_active%}
+                    <p>{{ auction.bids_count }} bid(s) so far.</p>
+                    <form action="{% url 'closelisting' auction.name %}" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input hidden type="text" value="{{ auction.name }}" name="close_auction">
+                            <input class="btn btn-dark" type="submit" value="Close">
+                        </div>
+                    </form>
+    
+                <!--If its an unregistered visitor, show only the bids count details--> 
+                {% else %}
+                    <p>{{ auction.bids_count }} bid(s) so far.</p>
+                {% endif %}
+    
+                <!--Category and the owner are visible to everyone-->
+                <h6>Category: {{ auction.category }}</h6>
+                <h6>Listed by: {{ auction.user }}</h6>
+                <p class="created_time">Created on: {{ auction.created_at }}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="comments">
+        
+        <!--If user is registered, set option to comment-->
+        {% if user.is_authenticated and auction.is_active %}
+            <form action="{% url 'comment' auction.name %}" method="post">
+                {% csrf_token %}
+                {{ comment }}
+                <br>
+                <input class="btn btn-dark" type="submit" value="Add Comment">
+                <br>
+            </form>
+        {% endif %}
+    
+    <!--Comments are visible to everyone-->
+        <hr>
+        <h5>Comments {{ comments|length }}</h5>
+        <ul> 
+            {% for comment in comments %}
+            <li>
+                <p class="comment"><b>{{ comment.commentor }}: </b>{{ comment.comment }}</p>
+            </li>
+            {% empty %}
+                <li>No comments.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

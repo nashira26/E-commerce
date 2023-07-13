@@ -1,0 +1,56 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>Register</h2>
+    <br>
+
+    {% if message %}
+        <div class="message justify-content-center">{{ message }}</div>
+    {% endif %}
+
+    <div class="justify-content-center">
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+
+        <div class="mb-3 row justify-content-center">
+            <label for="username" class="col-sm-2 col-form-label">Username:</label>
+            <div class="col-sm-4">
+                <input autofocus class="form-control mx-auto" type="text" id="username" name="username" placeholder="Username">
+            </div>
+        </div>
+
+        <div class="mb-3 row justify-content-center">
+            <label for="email" class="col-sm-2 col-form-label">Email Address:</label>    
+            <div class="col-sm-4">
+                <input autofocus class="form-control mx-auto" type="email" id="email" name="email" placeholder="Email Address">
+            </div>
+        </div>
+
+        <div class="mb-3 row justify-content-center">
+            <label for="password" class="col-sm-2 col-form-label">Password: </label>
+            <div class="col-sm-4">
+                <input class="form-control mx-auto" type="password" id="password" name="password" placeholder="Password">
+            </div>
+        </div>
+
+        <div class="mb-3 row justify-content-center">
+            <label for="confirmation" class="col-sm-2 col-form-label">Condirm Password: </label>
+            <div class="col-sm-4">
+                <input class="form-control mx-auto" type="password" id="confirmation" name="confirmation" placeholder="Confirm password">
+            </div>
+        </div>
+
+        <div class="mb-3 row justify-content-center">
+            <input class="btn btn-dark" type="submit" value="Register">
+        </div>
+        
+        <div class="mb-3 row justify-content-center">
+            <p>Already have an account? <a href="{% url 'login' %}">Log In here.</a></p>
+        </div>
+        
+    </form>
+
+</div>
+
+{% endblock %}

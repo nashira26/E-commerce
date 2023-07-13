@@ -1,0 +1,39 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Closed Listings</h2>
+    <br>
+
+    <div class="container">
+    <div class="row row-cols-2 row-cols-md-4">
+
+        {% for auction in auctions %}
+            <div class="col mb-4">
+            <div class="card shadow">
+
+                <!--Image section-->
+                <img class="card-img-top" src="{{ auction.image }}" alt="Auction Image" style="width: auto; height:auto;">
+                
+                <!--Info section-->
+                <div class="card-body">
+                <h3><a href="{% url 'getlisting' auction.name %}">{{ auction.name }}</a></h3>
+                <h6>{{ auction.description }}</h6>
+                <h5>Winning bid: ${{ auction.highest_bid.bidding_price }}</h5>
+                <p class="created_time">Created on: {{ auction.created_at }}</p>
+                
+                <!--winner congratulating section-->
+                {% if user.is_authenticated and user.username == auction.winner %}
+                    <h4 class="winner">Congratulations!! You are the winner!!</h>
+                {% endif %}
+                </div>
+
+            </div>
+            </div>
+        
+        {% empty %}
+            <p class="message">No closed auctions</li>
+        {% endfor %}
+    
+    </div>
+    </div>
+{% endblock %}
